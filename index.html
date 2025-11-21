@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tạo đơn khởi kiện hàng loạt</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin: 15px 0 10px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .loan-contract {
+            background: #e8f4fc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .debt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .debt-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .debt-table tr:last-child {
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .action-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .contract-count {
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #previewSection {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fff;
+        }
+        
+        #documentPreview {
+            white-space: pre-wrap;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid #eee;
+            background: #fefefe;
+        }
+        
+        .download-btn {
+            background: #27ae60;
+            margin-top: 10px;
+        }
+        
+        .download-btn:hover {
+            background: #219653;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CÔNG CỤ TẠO ĐƠN KHỞI KIỆN HÀNG LOẠT</h1>
+        
+        <!-- Form nhập thông tin chung -->
+        <div class="form-section">
+            <h2>THÔNG TIN CHUNG</h2>
+            
+            <div class="form-group">
+                <label for="courtName">Tên Tòa án:</label>
+                <input type="text" id="courtName" value="TÒA ÁN NHÂN DÂN KHU VỰC 8, THÀNH PHỐ HỒ CHÍ MINH">
+            </div>
+            
+            <div class="form-group">
+                <label for="currentDate">Ngày lập đơn:</label>
+                <input type="text" id="currentDate" value="Thành phố Hồ Chí Minh, ngày 22 tháng 11 năm 2025">
+            </div>
+        </div>
+        
+        <!-- Form nhập thông tin bên khởi kiện -->
+        <div class="form-section">
+            <h2>THÔNG TIN BÊN KHỞI KIỆN</h2>
+            
+            <div class="form-group">
+                <label for="plaintiffName">Tên ngân hàng:</label>
+                <input type="text" id="plaintiffName" value="Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)">
+            </div>
+            
+            <div class="form-group">
+                <label for="plaintiffAddress">Địa chỉ trụ sở:</label>
+                <input type="text" id="plaintiffAddress" value="Số 89 Láng Hạ, phường Đống Đa, Tp. Hà Nội">
+            </div>
+            
+            <div class="form-group">
+                <label for="plaintiffContact">Địa chỉ liên lạc:</label>
+                <input type="text" id="plaintiffContact" value="Tầng 1, số 96 Cao Thắng, phường Bàn Cờ, Tp. Hồ Chí Minh">
+            </div>
+            
+            <div class="form-group">
+                <label for="legalRepresentative">Người đại diện theo pháp luật:</label>
+                <input type="text" id="legalRepresentative" value="Ông Ngô Chí Dũng - Chủ tịch Hội đồng quản trị">
+            </div>
+            
+            <div class="form-group">
+                <label for="authorizedRepresentative">Người đại diện theo ủy quyền:</label>
+                <input type="text" id="authorizedRepresentative" value="Ông Đỗ Thành Trung - Chức vụ: Phó Giám đốc Trung tâm THN KHDN & XLN pháp lý">
+            </div>
+            
+            <div class="form-group">
+                <label for="authorizationDoc">Văn bản ủy quyền:</label>
+                <input type="text" id="authorizationDoc" value="Văn bản ủy quyền số 50/2025/UQN-CTQT ngày 07/11/2025 của Chủ tịch Hội đồng quản trị Ngân hàng TMCP Việt Nam Thịnh Vượng - VPBank">
+            </div>
+        </div>
+        
+        <!-- Form nhập thông tin bên bị kiện -->
+        <div class="form-section">
+            <h2>THÔNG TIN BÊN BỊ KIỆN</h2>
+            
+            <div class="form-group">
+                <label for="defendantName">Họ tên:</label>
+                <input type="text" id="defendantName" value="Phan Nhật Linh">
+            </div>
+            
+            <div class="form-group">
+                <label for="defendantYear">Năm sinh:</label>
+                <input type="text" id="defendantYear" value="1996">
+            </div>
+            
+            <div class="form-group">
+                <label for="defendantID">CMND/CCCD:</label>
+                <input type="text" id="defendantID" value="079096006806">
+            </div>
+            
+            <div class="form-group">
+                <label for="idIssueDate">Ngày cấp:</label>
+                <input type="text" id="idIssueDate" value="22/11/2021">
+            </div>
+            
+            <div class="form-group">
+                <label for="idIssuePlace">Nơi cấp:</label>
+                <input type="text" id="idIssuePlace" value="Cục Cảnh sát về QLHC và TTXH">
+            </div>
+            
+            <div class="form-group">
+                <label for="defendantAddress">Địa chỉ:</label>
+                <input type="text" id="defendantAddress" value="158/5A ấp Thới Tây 2, Xã Hóc Môn (Xã Tân Hiệp, Huyện Hóc Môn cũ), Thành phố Hồ Chí Minh">
+            </div>
+            
+            <div class="form-group">
+                <label for="defendantPhone">Số điện thoại:</label>
+                <input type="text" id="defendantPhone" value="0901350113">
+            </div>
+        </div>
+        
+        <!-- Form nhập thông tin hợp đồng vay -->
+        <div class="form-section">
+            <h2>THÔNG TIN HỢP ĐỒNG VAY</h2>
+            
+            <div id="contractsContainer">
+                <!-- Hợp đồng 1 -->
+                <div class="loan-contract" id="contract1">
+                    <h3>HỢP ĐỒNG VAY 1</h3>
+                    
+                    <div class="form-group">
+                        <label for="contract1Type">Loại hợp đồng:</label>
+                        <input type="text" id="contract1Type" value="Giấy đăng ký kiêm hợp đồng cho vay không TSBĐ, mở & sử dụng tài khoản thanh toán và dịch vụ ngân hàng điện tử">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract1Date">Ngày ký:</label>
+                        <input type="text" id="contract1Date" value="08/12/2023">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract1Amount">Số tiền vay:</label>
+                        <input type="text" id="contract1Amount" value="30.000.000 đồng">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract1Purpose">Mục đích vay:</label>
+                        <input type="text" id="contract1Purpose" value="vay tiêu dùng">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract1Term">Thời hạn vay:</label>
+                        <input type="text" id="contract1Term" value="48 tháng">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract1Interest">Lãi suất:</label>
+                        <input type="text" id="contract1Interest" value="23%/năm được cố định đến kỳ điều chỉnh lãi suất gần nhất, sau đó định kỳ điều chỉnh 03 tháng/01 lần (+) biên độ 18%/năm">
+                    </div>
+                    
+                    <h4>Dư nợ đến ngày:</h4>
+                    <input type="text" id="debtDate1" value="20/11/2025">
+                    
+                    <table class="debt-table">
+                        <tr>
+                            <td>Nợ gốc:</td>
+                            <td><input type="text" id="principal1" value="27.042.271 đồng"></td>
+                        </tr>
+                        <tr>
+                            <td>Nợ lãi:</td>
+                            <td><input type="text" id="interest1" value="32.070.580 đồng"></td>
+                        </tr>
+                        <tr>
+                            <td>Tổng cộng:</td>
+                            <td><input type="text" id="total1" value="59.112.851 đồng"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Hợp đồng 2 -->
+                <div class="loan-contract" id="contract2">
+                    <h3>HỢP ĐỒNG VAY 2</h3>
+                    
+                    <div class="form-group">
+                        <label for="contract2Type">Loại hợp đồng:</label>
+                        <input type="text" id="contract2Type" value="Giấy đề nghị kiêm hợp đồng cấp hạn mức tín dụng thẻ, phát hành và sử dụng thẻ tín dụng dịch vụ ngân hàng điện tử">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract2Date">Ngày ký:</label>
+                        <input type="text" id="contract2Date" value="05/12/2023">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract2Amount">Hạn mức tín dụng:</label>
+                        <input type="text" id="contract2Amount" value="11.000.000 đồng">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract2Purpose">Mục đích vay:</label>
+                        <input type="text" id="contract2Purpose" value="Vay tiêu dùng">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract2Interest">Lãi suất:</label>
+                        <input type="text" id="contract2Interest" value="47.88%/năm">
+                    </div>
+                    
+                    <h4>Dư nợ đến ngày:</h4>
+                    <input type="text" id="debtDate2" value="20/11/2025">
+                    
+                    <table class="debt-table">
+                        <tr>
+                            <td>Nợ gốc:</td>
+                            <td><input type="text" id="principal2" value="10.542.307 đồng"></td>
+                        </tr>
+                        <tr>
+                            <td>Nợ lãi:</td>
+                            <td><input type="text" id="interest2" value="26.564.426 đồng"></td>
+                        </tr>
+                        <tr>
+                            <td>Tổng cộng:</td>
+                            <td><input type="text" id="total2" value="37.106.733 đồng"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="contract-count" id="contractCount">Số lượng hợp đồng: 2</div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="addContract()">+ Thêm hợp đồng</button>
+                <button class="btn btn-danger" onclick="removeContract()">- Xóa hợp đồng</button>
+            </div>
+        </div>
+        
+        <!-- Form nhập thông tin vi phạm -->
+        <div class="form-section">
+            <h2>THÔNG TIN VI PHẠM</h2>
+            
+            <div class="form-group">
+                <label for="violationDate">Ngày bắt đầu vi phạm:</label>
+                <input type="text" id="violationDate" value="10/05/2023">
+            </div>
+            
+            <div class="form-group">
+                <label for="violationDescription">Mô tả vi phạm:</label>
+                <textarea id="violationDescription" rows="4" style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:4px;">Trong quá trình sử dụng vốn vay của những Hợp đồng cho vay trên, khách hàng đã quá hạn thanh toán nợ gốc và lãi vay cho VPBank. Mặc dù, Ngân hàng đã tạo điều kiện về thời gian cho khách hàng trả nợ nhưng phía khách hàng vẫn không có phương án trả dứt nợ cho ngân hàng.
+
+Xét thấy bên vay không còn khả năng thanh toán nợ, do đó VPBank đã chuyển toàn bộ khoản vay sang nợ quá hạn và thông báo chấm dứt việc thực hiện đối với hợp đồng cho vay trên, đồng thời tiến hành khởi kiện đương sự tại Toà án nhân dân có thẩm quyền để giải quyết.</textarea>
+            </div>
+        </div>
+        
+        <!-- Form nhập yêu cầu khởi kiện -->
+        <div class="form-section">
+            <h2>YÊU CẦU KHỞI KIỆN</h2>
+            
+            <div class="form-group">
+                <label for="totalPrincipal">Tổng nợ gốc:</label>
+                <input type="text" id="totalPrincipal" value="37.584.578 đồng">
+            </div>
+            
+            <div class="form-group">
+                <label for="totalInterest">Tổng nợ lãi:</label>
+                <input type="text" id="totalInterest" value="58.635.006 đồng">
+            </div>
+            
+            <div class="form-group">
+                <label for="grandTotal">Tổng cộng:</label>
+                <input type="text" id="grandTotal" value="96.219.584 đồng">
+            </div>
+        </div>
+        
+        <!-- Nút tạo đơn -->
+        <div class="action-buttons">
+            <button class="btn btn-success" onclick="generateDocument()">TẠO ĐƠN KHỞI KIỆN</button>
+            <button class="btn" onclick="resetForm()">NHẬP LẠI</button>
+        </div>
+        
+        <!-- Khu vực xem trước và tải về -->
+        <div id="previewSection" class="hidden">
+            <h2>XEM TRƯỚC ĐƠN KHỞI KIỆN</h2>
+            <div id="documentPreview"></div>
+            <div class="action-buttons">
+                <button class="btn download-btn" onclick="downloadDocument()">TẢI VỀ FILE WORD</button>
+                <button class="btn" onclick="printDocument()">IN ĐƠN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let contractCount = 2;
+        
+        function addContract() {
+            contractCount++;
+            const newContract = document.createElement('div');
+            newContract.className = 'loan-contract';
+            newContract.id = `contract${contractCount}`;
+            
+            newContract.innerHTML = `
+                <h3>HỢP ĐỒNG VAY ${contractCount}</h3>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Type">Loại hợp đồng:</label>
+                    <input type="text" id="contract${contractCount}Type" placeholder="Loại hợp đồng">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Date">Ngày ký:</label>
+                    <input type="text" id="contract${contractCount}Date" placeholder="Ngày ký">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Amount">Số tiền vay/Hạn mức:</label>
+                    <input type="text" id="contract${contractCount}Amount" placeholder="Số tiền vay">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Purpose">Mục đích vay:</label>
+                    <input type="text" id="contract${contractCount}Purpose" placeholder="Mục đích vay">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Term">Thời hạn vay (nếu có):</label>
+                    <input type="text" id="contract${contractCount}Term" placeholder="Thời hạn vay">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contract${contractCount}Interest">Lãi suất:</label>
+                    <input type="text" id="contract${contractCount}Interest" placeholder="Lãi suất">
+                </div>
+                
+                <h4>Dư nợ đến ngày:</h4>
+                <input type="text" id="debtDate${contractCount}" placeholder="Ngày tính nợ">
+                
+                <table class="debt-table">
+                    <tr>
+                        <td>Nợ gốc:</td>
+                        <td><input type="text" id="principal${contractCount}" placeholder="Nợ gốc"></td>
+                    </tr>
+                    <tr>
+                        <td>Nợ lãi:</td>
+                        <td><input type="text" id="interest${contractCount}" placeholder="Nợ lãi"></td>
+                    </tr>
+                    <tr>
+                        <td>Tổng cộng:</td>
+                        <td><input type="text" id="total${contractCount}" placeholder="Tổng cộng"></td>
+                    </tr>
+                </table>
+            `;
+            
+            document.getElementById('contractsContainer').appendChild(newContract);
+            document.getElementById('contractCount').textContent = `Số lượng hợp đồng: ${contractCount}`;
+        }
+        
+        function removeContract() {
+            if (contractCount > 1) {
+                const lastContract = document.getElementById(`contract${contractCount}`);
+                lastContract.remove();
+                contractCount--;
+                document.getElementById('contractCount').textContent = `Số lượng hợp đồng: ${contractCount}`;
+            } else {
+                alert('Phải có ít nhất 1 hợp đồng vay');
+            }
+        }
+        
+        function generateDocument() {
+            // Lấy tất cả thông tin từ form
+            const courtName = document.getElementById('courtName').value;
+            const currentDate = document.getElementById('currentDate').value;
+            
+            const plaintiffName = document.getElementById('plaintiffName').value;
+            const plaintiffAddress = document.getElementById('plaintiffAddress').value;
+            const plaintiffContact = document.getElementById('plaintiffContact').value;
+            const legalRepresentative = document.getElementById('legalRepresentative').value;
+            const authorizedRepresentative = document.getElementById('authorizedRepresentative').value;
+            const authorizationDoc = document.getElementById('authorizationDoc').value;
+            
+            const defendantName = document.getElementById('defendantName').value;
+            const defendantYear = document.getElementById('defendantYear').value;
+            const defendantID = document.getElementById('defendantID').value;
+            const idIssueDate = document.getElementById('idIssueDate').value;
+            const idIssuePlace = document.getElementById('idIssuePlace').value;
+            const defendantAddress = document.getElementById('defendantAddress').value;
+            const defendantPhone = document.getElementById('defendantPhone').value;
+            
+            const violationDate = document.getElementById('violationDate').value;
+            const violationDescription = document.getElementById('violationDescription').value;
+            
+            const totalPrincipal = document.getElementById('totalPrincipal').value;
+            const totalInterest = document.getElementById('totalInterest').value;
+            const grandTotal = document.getElementById('grandTotal').value;
+            
+            // Tạo nội dung hợp đồng
+            let contractsContent = '';
+            for (let i = 1; i <= contractCount; i++) {
+                const contractType = document.getElementById(`contract${i}Type`).value;
+                const contractDate = document.getElementById(`contract${i}Date`).value;
+                const contractAmount = document.getElementById(`contract${i}Amount`).value;
+                const contractPurpose = document.getElementById(`contract${i}Purpose`).value;
+                const contractTerm = document.getElementById(`contract${i}Term`).value;
+                const contractInterest = document.getElementById(`contract${i}Interest`).value;
+                const debtDate = document.getElementById(`debtDate${i}`).value;
+                const principal = document.getElementById(`principal${i}`).value;
+                const interest = document.getElementById(`interest${i}`).value;
+                const total = document.getElementById(`total${i}`).value;
+                
+                contractsContent += `
+${i}.  ${contractType} ngày ${contractDate}, cụ thể:
+
+- ${contractAmount.includes('Hạn mức') ? 'Hạn mức tín dụng:' : 'Số tiền cho vay:'} ${contractAmount}
+- Mục đích vay: ${contractPurpose}
+${contractTerm ? `- Thời hạn vay: ${contractTerm}` : ''}
+- Lãi suất: ${contractInterest}
+
+Dư nợ thực tế tạm tính đến ngày ${debtDate} theo hợp đồng cho vay trên là:
+
++-------------------------------+--------------------------------------+
+| - Nợ gốc:                     | ${principal}                      |
++-------------------------------+--------------------------------------+
+| - Nợ lãi:                     | ${interest}                      |
++-------------------------------+--------------------------------------+
+| **Tổng cộng:**                | **${total}**                  |
++===============================+======================================+
+
+`;
+            }
+            
+            // Tạo nội dung đơn hoàn chỉnh
+            const documentContent = `
+${currentDate}
+
+#### ĐƠN SỬA ĐỔI BỔ SUNG ĐƠN KHỞI KIỆN
+
+*(V/v ông/bà ${defendantName} vi phạm hợp đồng tín dụng)*
+
+**Kính gửi: ${courtName}**
+
+I.  **Bên khởi kiện**: **${plaintiffName}**.
+
+    - Địa chỉ trụ sở: ${plaintiffAddress}.
+    - Địa chỉ liên lạc: ${plaintiffContact}.
+    - Người đại diện theo pháp luật: **${legalRepresentative}**.
+    - Người đại diện theo ủy quyền: **${authorizedRepresentative}**.
+
+*(Theo ${authorizationDoc}).*
+
+II. **Bên bị kiện: Ông/bà ${defendantName} Sinh năm: ${defendantYear}**
+
+    - CMND/CCCD số ${defendantID} do ${idIssuePlace} cấp ngày ${idIssueDate}.
+    - Địa chỉ: ${defendantAddress}.
+    - Số điện thoại: ${defendantPhone}
+
+III. **Nội dung khởi kiện:**
+
+${plaintiffName.split(' ')[0]} *(sau đây gọi tắt là "VPBank")* với ông/bà ${defendantName} đã cùng ký kết các Hợp đồng cho vay như sau:
+
+${contractsContent}
+
+Từ ngày ${violationDate} ông/bà ${defendantName} đã vi phạm nghĩa vụ thanh toán nợ vay cho VPBank.
+
+${violationDescription}
+
+**[YÊU CẦU CỦA NGƯỜI KHỞI KIỆN]**
+
+Kính đề nghị Quý Tòa thụ lý giải quyết vụ án và xem xét phán quyết:
+
+1.  Buộc ông/bà ${defendantName} phải thanh toán cho VPBank một lần tổng dư nợ tạm tính đến ngày ${document.getElementById('debtDate1').value} là:
+
++-------------------------------+--------------------------------------+
+| - Nợ gốc:                     | ${totalPrincipal}                      |
++-------------------------------+--------------------------------------+
+| - Nợ lãi:                     | ${totalInterest}                      |
++-------------------------------+--------------------------------------+
+| **Tổng cộng:**                | **${grandTotal}**                  |
++===============================+======================================+
+
+2.  Yêu cầu Tòa án tuyên trong bản án tiếp tục cho tính lãi theo đúng thỏa thuận trong các Hợp đồng cho đến khi ông/bà ${defendantName} thực tế thanh toán hết nợ cho VPBank.
+
+3.  Ông/bà ${defendantName} phải chịu toàn bộ án phí và các chi phí liên quan (nếu có) do vi phạm nghĩa vụ thanh toán.
+
+Những nội dung đã trình bày như trên là đúng sự thật, kính trình Quý Tòa thẩm xét./.
+
+**NGƯỜI KHỞI KIỆN**
+
+> **${plaintiffName.split('(')[0].trim()}**
+>
+> **NGƯỜI ĐẠI DIỆN THEO ỦY QUYỀN**
+>
+> **${authorizedRepresentative.split(':')[1].trim()}**
+            `;
+            
+            // Hiển thị nội dung đơn
+            document.getElementById('documentPreview').textContent = documentContent;
+            document.getElementById('previewSection').classList.remove('hidden');
+            
+            // Cuộn đến phần xem trước
+            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function downloadDocument() {
+            const content = document.getElementById('documentPreview').textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Don_khoi_kien_${document.getElementById('defendantName').value}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function printDocument() {
+            const content = document.getElementById('documentPreview').textContent;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Đơn khởi kiện</title>
+                        <style>
+                            body { font-family: 'Times New Roman', serif; line-height: 1.5; padding: 20px; }
+                            pre { white-space: pre-wrap; font-family: 'Times New Roman', serif; }
+                        </style>
+                    </head>
+                    <body>
+                        <pre>${content}</pre>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        function resetForm() {
+            document.getElementById('previewSection').classList.add('hidden');
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+</html>
