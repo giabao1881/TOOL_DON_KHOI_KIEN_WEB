@@ -1,1248 +1,199 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CÔNG CỤ TẠO ĐƠN KHỞI KIỆN HÀNG LOẠT</title>
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Times New Roman", serif;
-        }
-        
-        body {
-            background: #f5f5f5;
-            padding: 20px;
-            line-height: 1.5;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        
-        .header {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            display: flex;
-            min-height: 800px;
-        }
-        
-        .input-panel {
-            flex: 1;
-            background: #f8f9fa;
-            padding: 20px;
-            border-right: 1px solid #ddd;
-            overflow-y: auto;
-            max-height: 800px;
-        }
-        
-        .preview-panel {
-            flex: 1;
-            padding: 20px;
-            background: white;
-            overflow-y: auto;
-        }
-        
-        .section {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .section-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-            color: #2c3e50;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: "Times New Roman", serif;
-        }
-        
-        .form-group textarea {
-            height: 80px;
-            resize: vertical;
-        }
-        
-        .debt-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-        
-        .debt-table td {
-            border: 1px solid #000;
-            padding: 8px 12px;
-        }
-        
-        .debt-table input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            font-family: "Times New Roman", serif;
-        }
-        
-        .contract-section {
-            background: #e8f4fc;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 4px solid #3498db;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 5px;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: #3498db;
-            color: white;
-        }
-        
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-warning {
-            background: #f39c12;
-            color: white;
-        }
-        
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .action-buttons {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
-        
-        .document-preview {
-            background: white;
-            padding: 30px;
-            border: 1px solid #ddd;
-            min-height: 800px;
-            font-family: "Times New Roman", serif;
-            line-height: 1.6;
-        }
-        
-        .preview-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        
-        .preview-table td {
-            border: 1px solid #000;
-            padding: 8px 12px;
-        }
-        
-        .upload-area {
-            border: 2px dashed #3498db;
-            padding: 30px;
-            text-align: center;
-            margin: 20px 0;
-            border-radius: 5px;
-            background: #f8f9fa;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover {
-            background: #e8f4fc;
-            border-color: #2980b9;
-        }
-        
-        .upload-area i {
-            font-size: 48px;
-            color: #3498db;
-            margin-bottom: 15px;
-        }
-        
-        .tab-container {
-            margin: 20px 0;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #3498db;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            background: #ecf0f1;
-            border: 1px solid #bdc3c7;
-            border-bottom: none;
-            cursor: pointer;
-            margin-right: 5px;
-            border-radius: 5px 5px 0 0;
-        }
-        
-        .tab.active {
-            background: #3498db;
-            color: white;
-            border-color: #2980b9;
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-top: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .customer-count {
-            text-align: center;
-            padding: 10px;
-            background: #2c3e50;
-            color: white;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .signature-section {
-            text-align: right;
-            margin-top: 100px;
-            font-style: italic;
-        }
-        
-        .customer-item {
-            background: #fff;
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .customer-header {
-            background: #34495e;
-            color: white;
-            padding: 10px;
-            margin: -15px -15px 10px -15px;
-            border-radius: 3px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .remove-customer {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        
-        .file-info {
-            background: #d4edda;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            border-left: 4px solid #28a745;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background: #27ae60;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .input-panel {
-                border-right: none;
-                border-bottom: 1px solid #ddd;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <title>Tool tạo đơn khởi kiện (GitHub Pages)</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      max-width: 900px; 
+      margin: 20px auto; 
+      line-height: 1.4;
+    }
+    h1 { text-align: center; }
+    fieldset { margin-bottom: 16px; }
+    label { display: block; margin-top: 6px; }
+    input, select, textarea { width: 100%; padding: 4px; box-sizing: border-box; }
+    button { margin-top: 12px; padding: 8px 16px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>CÔNG CỤ TẠO ĐƠN KHỞI KIỆN HÀNG LOẠT</h1>
-            <p>Nhập thông tin một lần - Tạo đơn cho nhiều khách hàng</p>
-        </div>
-        
-        <div class="main-content">
-            <!-- Panel nhập liệu -->
-            <div class="input-panel">
-                <div class="tab-container">
-                    <div class="tabs">
-                        <div class="tab active" onclick="switchTab(1)">NHẬP THÔNG TIN</div>
-                        <div class="tab" onclick="switchTab(2)">UPLOAD FILE</div>
-                        <div class="tab" onclick="switchTab(3)">DÁN DỮ LIỆU</div>
-                    </div>
-                    
-                    <!-- Tab 1: Nhập thông tin -->
-                    <div id="tab1" class="tab-content active">
-                        <div class="section">
-                            <div class="section-title">THIẾT LẬP MẪU CHUNG</div>
-                            
-                            <div class="form-group">
-                                <label>Tên Tòa án:</label>
-                                <input type="text" id="courtName" value="TÒA ÁN NHÂN DÂN KHU VỰC 8, THÀNH PHỐ HỒ CHÍ MINH">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Ngày lập đơn:</label>
-                                <input type="text" id="currentDate" value="Thành phố Hồ Chí Minh, ngày 22 tháng 11 năm 2025">
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <div class="section-title">THÔNG TIN NGÂN HÀNG</div>
-                            
-                            <div class="form-group">
-                                <label>Tên ngân hàng:</label>
-                                <input type="text" id="plaintiffName" value="Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Địa chỉ trụ sở:</label>
-                                <input type="text" id="plaintiffAddress" value="Số 89 Láng Hạ, phường Đống Đa, Tp. Hà Nội">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Địa chỉ liên lạc:</label>
-                                <input type="text" id="plaintiffContact" value="Tầng 1, số 96 Cao Thắng, phường Bàn Cờ, Tp. Hồ Chí Minh">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Người đại diện theo pháp luật:</label>
-                                <input type="text" id="legalRepresentative" value="Ông Ngô Chí Dũng - Chủ tịch Hội đồng quản trị">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Người đại diện theo ủy quyền:</label>
-                                <input type="text" id="authorizedRepresentative" value="Ông Đỗ Thành Trung - Chức vụ: Phó Giám đốc Trung tâm THN KHDN & XLN pháp lý">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Văn bản ủy quyền:</label>
-                                <input type="text" id="authorizationDoc" value="Văn bản ủy quyền số 50/2025/UQN-CTQT ngày 07/11/2025 của Chủ tịch Hội đồng quản trị Ngân hàng TMCP Việt Nam Thịnh Vượng - VPBank">
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <div class="section-title">MẪU HỢP ĐỒNG VAY</div>
-                            <div id="contractsContainer">
-                                <!-- Contracts will be added here -->
-                            </div>
-                            <div style="text-align: center;">
-                                <button class="btn btn-primary" onclick="addContract()">+ Thêm hợp đồng</button>
-                                <button class="btn btn-danger" onclick="removeContract()">- Xóa hợp đồng</button>
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <div class="section-title">THÔNG TIN VI PHẠM</div>
-                            
-                            <div class="form-group">
-                                <label>Ngày bắt đầu vi phạm:</label>
-                                <input type="text" id="violationDate" value="10/05/2023">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Mô tả vi phạm:</label>
-                                <textarea id="violationDescription">Trong quá trình sử dụng vốn vay của những Hợp đồng cho vay trên, khách hàng đã quá hạn thanh toán nợ gốc và lãi vay cho VPBank. Mặc dù, Ngân hàng đã tạo điều kiện về thời gian cho khách hàng trả nợ nhưng phía khách hàng vẫn không có phương án trả dứt nợ cho ngân hàng.
+  <h1>TOOL TẠO ĐƠN KHỞI KIỆN (WEB)</h1>
 
-Xét thấy bên vay không còn khả năng thanh toán nợ, do đó VPBank đã chuyển toàn bộ khoản vay sang nợ quá hạn và thông báo chấm dứt việc thực hiện đối với hợp đồng cho vay trên, đồng thời tiến hành khởi kiện đương sự tại Toà án nhân dân có thẩm quyền để giải quyết.</textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <div class="section-title">DANH SÁCH KHÁCH HÀNG</div>
-                            <div class="customer-count" id="customerCount">Số lượng khách hàng: 1</div>
-                            <div id="customersContainer">
-                                <!-- Customer forms will be added here -->
-                            </div>
-                            <div style="text-align: center;">
-                                <button class="btn btn-success" onclick="addCustomer()">+ Thêm khách hàng</button>
-                                <button class="btn btn-danger" onclick="removeCustomer()">- Xóa khách hàng</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tab 2: Upload file -->
-                    <div id="tab2" class="tab-content">
-                        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileUpload').click()">
-                            <div>📁</div>
-                            <h3>UPLOAD FILE EXCEL</h3>
-                            <p>Kéo thả file vào đây hoặc click để chọn file</p>
-                            <input type="file" id="fileUpload" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this.files[0])">
-                            <p style="margin-top: 15px; font-size: 12px; color: #666;">
-                                Hỗ trợ: Excel (.xlsx, .xls), CSV (.csv)
-                            </p>
-                        </div>
-                        
-                        <div id="fileInfo" class="file-info hidden">
-                            <strong>File đã chọn:</strong> <span id="fileName"></span>
-                            <br>
-                            <strong>Số dòng dữ liệu:</strong> <span id="rowCount"></span>
-                            <button class="btn btn-success" onclick="processUploadedData()" style="margin-top: 10px;">XỬ LÝ DỮ LIỆU</button>
-                        </div>
+  <fieldset>
+    <legend><strong>Thông tin bị đơn</strong></legend>
+    <label>Họ tên bị đơn:
+      <input id="tenBiDon" />
+    </label>
+    <label>Năm sinh:
+      <input id="namSinh" />
+    </label>
+    <label>Số CMND/CCCD:
+      <input id="soCCCD" />
+    </label>
+    <label>Nơi cấp:
+      <input id="noiCap" />
+    </label>
+    <label>Địa chỉ:
+      <textarea id="diaChi" rows="2"></textarea>
+    </label>
+    <label>Số điện thoại:
+      <input id="dienThoai" />
+    </label>
+    <label>Ngày vi phạm nghĩa vụ thanh toán:
+      <input id="ngayViPham" placeholder="ví dụ: 10/05/2023" />
+    </label>
+    <label>Ngày tính nợ:
+      <input id="ngayTinhNo" placeholder="ví dụ: 20/11/2025" />
+    </label>
+  </fieldset>
 
-                        <div class="progress-bar hidden" id="progressBar">
-                            <div class="progress" id="progress"></div>
-                        </div>
-                        
-                        <div class="section">
-                            <div class="section-title">HƯỚNG DẪN UPLOAD</div>
-                            <p><strong>Định dạng file Excel mẫu:</strong></p>
-                            <ul style="padding-left: 20px; margin: 10px 0;">
-                                <li>Column A: Họ tên</li>
-                                <li>Column B: Năm sinh</li>
-                                <li>Column C: CMND/CCCD</li>
-                                <li>Column D: Ngày cấp</li>
-                                <li>Column E: Nơi cấp</li>
-                                <li>Column F: Địa chỉ</li>
-                                <li>Column G: Số điện thoại</li>
-                            </ul>
-                            <button class="btn btn-warning" onclick="downloadTemplate()">TẢI FILE MẪU</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Tab 3: Dán dữ liệu -->
-                    <div id="tab3" class="tab-content">
-                        <div class="section">
-                            <div class="section-title">DÁN DỮ LIỆU TỪ EXCEL</div>
-                            
-                            <div class="form-group">
-                                <label>Dán dữ liệu (copy từ Excel):</label>
-                                <textarea id="pasteData" placeholder="Dán dữ liệu từ Excel vào đây...&#10;Mỗi dòng là một khách hàng, các cột cách nhau bằng tab&#10;&#10;Ví dụ:&#10;Phan Nhật Linh	1996	079096006806	22/11/2021	Cục Cảnh sát về QLHC và TTXH	158/5A ấp Thới Tây 2, Xã Hóc Môn	0901350113&#10;Nguyễn Văn A	1985	012345678901	15/08/2020	Công an TP Hà Nội	123 Đường ABC, Quận 1, TP HCM	0912345678" style="height: 200px;"></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Hoặc nhập danh sách (mỗi dòng một khách hàng):</label>
-                                <textarea id="textData" placeholder="Nhập danh sách khách hàng...&#10;Mỗi dòng một khách hàng với định dạng:&#10;Họ tên | Năm sinh | CMND | Ngày cấp | Nơi cấp | Địa chỉ | Số ĐT&#10;&#10;Ví dụ:&#10;Phan Nhật Linh | 1996 | 079096006806 | 22/11/2021 | Cục Cảnh sát về QLHC và TTXH | 158/5A ấp Thới Tây 2, Xã Hóc Môn | 0901350113" style="height: 200px;"></textarea>
-                            </div>
-                            
-                            <button class="btn btn-success" onclick="processPastedData()">XỬ LÝ DỮ LIỆU</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="btn btn-success" onclick="generateAllDocuments()">TẠO ĐƠN HÀNG LOẠT</button>
-                    <button class="btn btn-primary" onclick="previewDocument()">XEM TRƯỚC</button>
-                    <button class="btn btn-warning" onclick="resetForm()">NHẬP LẠI</button>
-                </div>
-            </div>
-            
-            <!-- Panel xem trước -->
-            <div class="preview-panel">
-                <div class="section">
-                    <div class="section-title">XEM TRƯỚC ĐƠN KHỞI KIỆN</div>
-                    <div class="document-preview" id="documentPreview">
-                        <div style="text-align: center; color: #666; padding: 100px 20px;">
-                            <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
-                            <h3>CHƯA CÓ DỮ LIỆU</h3>
-                            <p>Nhập thông tin và click "XEM TRƯỚC" để hiển thị đơn tại đây</p>
-                        </div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="btn btn-success" onclick="downloadAllDocuments()">TẢI TẤT CẢ (.ZIP)</button>
-                        <button class="btn btn-primary" onclick="printDocument()">IN ĐƠN</button>
-                        <button class="btn btn-warning" onclick="downloadSummary()">BÁO CÁO TỔNG HỢP</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <fieldset>
+    <legend><strong>Thông tin HỢP ĐỒNG (1 hợp đồng)</strong></legend>
+    <label>Loại hợp đồng:
+      <select id="loaiHD">
+        <option value="LD">LD (vay tiền mặt)</option>
+        <option value="THE">Thẻ tín dụng</option>
+        <option value="PDPD">PDPD</option>
+      </select>
+    </label>
+    <label>Tiêu đề hợp đồng (ví dụ: Giấy đăng ký kiêm hợp đồng cho vay không TSBD, mở &amp; sử dụng...):
+      <textarea id="tieuDeHD" rows="2"></textarea>
+    </label>
+    <label>Số hợp đồng (nếu có):
+      <input id="soHD" />
+    </label>
+    <label>Ngày ký (nếu cần):
+      <input id="ngayHD" placeholder="08/12/2023" />
+    </label>
+    <label>Số tiền cho vay / hạn mức:
+      <input id="soTienVay" placeholder="30000000" />
+    </label>
+    <label>Mục đích vay:
+      <textarea id="mucDichVay" rows="2"></textarea>
+    </label>
+    <label>Thời hạn vay:
+      <input id="thoiHanVay" placeholder="48 tháng" />
+    </label>
+    <label>Mô tả lãi suất (ghi đúng câu tiếng Việt bạn muốn):
+      <textarea id="laiSuatMoTa" rows="2" placeholder="Ví dụ: 23%/năm được cố định đến kỳ điều chỉnh lãi suất gần nhất, sau đó định kỳ điều chỉnh 03 tháng/01 lần (+) biên độ 18%/năm."></textarea>
+    </label>
+    <label>Dư nợ gốc (tới ngày tính nợ):
+      <input id="noGoc" placeholder="27042271" />
+    </label>
+    <label>Dư nợ lãi (tới ngày tính nợ):
+      <input id="noLai" placeholder="32070580" />
+    </label>
+  </fieldset>
 
-    <script>
-        // Biến toàn cục
-        let customerCount = 1;
-        let contractCount = 0;
-        let customers = [];
-        let uploadedData = [];
-        
-        // Khởi tạo khi trang load
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeContracts();
-            initializeCustomers();
-            setupEventListeners();
-        });
-        
-        // Chuyển tab
-        function switchTab(tabNumber) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            document.querySelectorAll('.tab')[tabNumber - 1].classList.add('active');
-            document.getElementById(`tab${tabNumber}`).classList.add('active');
-        }
-        
-        // Khởi tạo hợp đồng mẫu
-        function initializeContracts() {
-            addContract(true); // Hợp đồng 1
-            document.getElementById('contract1Type').value = 'Giấy đăng ký kiêm hợp đồng cho vay không TSBĐ, mở & sử dụng tài khoản thanh toán và dịch vụ ngân hàng điện tử';
-            document.getElementById('contract1Date').value = '08/12/2023';
-            document.getElementById('contract1Amount').value = '30.000.000 đồng';
-            document.getElementById('contract1Purpose').value = 'vay tiêu dùng';
-            document.getElementById('contract1Term').value = '48 tháng';
-            document.getElementById('contract1Interest').value = '23%/năm được cố định đến kỳ điều chỉnh lãi suất gần nhất, sau đó định kỳ điều chỉnh 03 tháng/01 lần (+) biên độ 18%/năm';
-            document.getElementById('debtDate1').value = '20/11/2025';
-            document.getElementById('principal1').value = '27.042.271 đồng';
-            document.getElementById('interest1').value = '32.070.580 đồng';
-            document.getElementById('total1').value = '59.112.851 đồng';
-            
-            addContract(true); // Hợp đồng 2
-            document.getElementById('contract2Type').value = 'Giấy đề nghị kiêm hợp đồng cấp hạn mức tín dụng thẻ, phát hành và sử dụng thẻ tín dụng dịch vụ ngân hàng điện tử';
-            document.getElementById('contract2Date').value = '05/12/2023';
-            document.getElementById('contract2Amount').value = '11.000.000 đồng';
-            document.getElementById('contract2Purpose').value = 'Vay tiêu dùng';
-            document.getElementById('contract2Interest').value = '47.88%/năm';
-            document.getElementById('debtDate2').value = '20/11/2025';
-            document.getElementById('principal2').value = '10.542.307 đồng';
-            document.getElementById('interest2').value = '26.564.426 đồng';
-            document.getElementById('total2').value = '37.106.733 đồng';
-        }
-        
-        // Thêm hợp đồng
-        function addContract(isInitial = false) {
-            if (!isInitial) {
-                contractCount++;
-            }
-            const contractId = isInitial ? ++contractCount : contractCount;
-            
-            const contractDiv = document.createElement('div');
-            contractDiv.className = 'contract-section';
-            contractDiv.id = `contract${contractId}`;
-            
-            contractDiv.innerHTML = `
-                <h4 style="color: #2c3e50; margin-bottom: 15px;">HỢP ĐỒNG VAY ${contractId}</h4>
-                <div class="form-group">
-                    <label>Loại hợp đồng:</label>
-                    <input type="text" id="contract${contractId}Type">
-                </div>
-                <div class="form-group">
-                    <label>Ngày ký:</label>
-                    <input type="text" id="contract${contractId}Date">
-                </div>
-                <div class="form-group">
-                    <label>Số tiền vay/Hạn mức:</label>
-                    <input type="text" id="contract${contractId}Amount">
-                </div>
-                <div class="form-group">
-                    <label>Mục đích vay:</label>
-                    <input type="text" id="contract${contractId}Purpose">
-                </div>
-                <div class="form-group">
-                    <label>Thời hạn vay:</label>
-                    <input type="text" id="contract${contractId}Term">
-                </div>
-                <div class="form-group">
-                    <label>Lãi suất:</label>
-                    <input type="text" id="contract${contractId}Interest">
-                </div>
-                <div class="form-group">
-                    <label>Dư nợ đến ngày:</label>
-                    <input type="text" id="debtDate${contractId}">
-                </div>
-                <table class="debt-table">
-                    <tr>
-                        <td style="width: 30%;">Nợ gốc:</td>
-                        <td style="width: 70%;"><input type="text" id="principal${contractId}"></td>
-                    </tr>
-                    <tr>
-                        <td>Nợ lãi:</td>
-                        <td><input type="text" id="interest${contractId}"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tổng cộng:</strong></td>
-                        <td><input type="text" id="total${contractId}"></td>
-                    </tr>
-                </table>
-            `;
-            
-            document.getElementById('contractsContainer').appendChild(contractDiv);
-        }
-        
-        function removeContract() {
-            if (contractCount > 1) {
-                const contractDiv = document.getElementById(`contract${contractCount}`);
-                contractDiv.remove();
-                contractCount--;
-            }
-        }
-        
-        // Quản lý khách hàng
-        function initializeCustomers() {
-            addCustomer(); // Khách hàng đầu tiên
-        }
-        
-        function addCustomer(customerData = null) {
-            customerCount++;
-            const customerId = customerCount;
-            
-            const customerDiv = document.createElement('div');
-            customerDiv.className = 'customer-item';
-            customerDiv.id = `customer${customerId}`;
-            
-            customerDiv.innerHTML = `
-                <div class="customer-header">
-                    <span>KHÁCH HÀNG ${customerId}</span>
-                    <button class="remove-customer" onclick="removeSpecificCustomer(${customerId})">Xóa</button>
-                </div>
-                <div class="form-group">
-                    <label>Họ tên:</label>
-                    <input type="text" id="customerName${customerId}" value="${customerData ? customerData.name : (customerId === 1 ? 'Phan Nhật Linh' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>Năm sinh:</label>
-                    <input type="text" id="customerYear${customerId}" value="${customerData ? customerData.year : (customerId === 1 ? '1996' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>CMND/CCCD:</label>
-                    <input type="text" id="customerId${customerId}" value="${customerData ? customerData.idNumber : (customerId === 1 ? '079096006806' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>Ngày cấp:</label>
-                    <input type="text" id="customerIdDate${customerId}" value="${customerData ? customerData.idDate : (customerId === 1 ? '22/11/2021' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>Nơi cấp:</label>
-                    <input type="text" id="customerIdPlace${customerId}" value="${customerData ? customerData.idPlace : (customerId === 1 ? 'Cục Cảnh sát về QLHC và TTXH' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>Địa chỉ:</label>
-                    <input type="text" id="customerAddress${customerId}" value="${customerData ? customerData.address : (customerId === 1 ? '158/5A ấp Thới Tây 2, Xã Hóc Môn (Xã Tân Hiệp, Huyện Hóc Môn cũ), Thành phố Hồ Chí Minh' : '')}">
-                </div>
-                <div class="form-group">
-                    <label>Số điện thoại:</label>
-                    <input type="text" id="customerPhone${customerId}" value="${customerData ? customerData.phone : (customerId === 1 ? '0901350113' : '')}">
-                </div>
-            `;
-            
-            document.getElementById('customersContainer').appendChild(customerDiv);
-            updateCustomerCount();
-        }
-        
-        function removeCustomer() {
-            if (customerCount > 1) {
-                const customerDiv = document.getElementById(`customer${customerCount}`);
-                customerDiv.remove();
-                customerCount--;
-                updateCustomerCount();
-            }
-        }
-        
-        function removeSpecificCustomer(customerId) {
-            if (customerCount > 1) {
-                const customerDiv = document.getElementById(`customer${customerId}`);
-                customerDiv.remove();
-                // Cập nhật lại ID cho các khách hàng còn lại
-                for (let i = customerId + 1; i <= customerCount; i++) {
-                    const currentCustomer = document.getElementById(`customer${i}`);
-                    if (currentCustomer) {
-                        currentCustomer.id = `customer${i-1}`;
-                        currentCustomer.querySelector('.customer-header span').textContent = `KHÁCH HÀNG ${i-1}`;
-                        currentCustomer.querySelector('.remove-customer').setAttribute('onclick', `removeSpecificCustomer(${i-1})`);
-                        
-                        // Cập nhật ID cho các input
-                        const inputs = currentCustomer.querySelectorAll('input');
-                        inputs[0].id = `customerName${i-1}`;
-                        inputs[1].id = `customerYear${i-1}`;
-                        inputs[2].id = `customerId${i-1}`;
-                        inputs[3].id = `customerIdDate${i-1}`;
-                        inputs[4].id = `customerIdPlace${i-1}`;
-                        inputs[5].id = `customerAddress${i-1}`;
-                        inputs[6].id = `customerPhone${i-1}`;
-                    }
-                }
-                customerCount--;
-                updateCustomerCount();
-            }
-        }
-        
-        function updateCustomerCount() {
-            document.getElementById('customerCount').textContent = `Số lượng khách hàng: ${customerCount}`;
-        }
-        
-        // Xử lý upload file
-        function handleFileUpload(file) {
-            if (!file) return;
-            
-            document.getElementById('fileName').textContent = file.name;
-            document.getElementById('fileInfo').classList.remove('hidden');
-            document.getElementById('progressBar').classList.remove('hidden');
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                    
-                    uploadedData = jsonData.filter(row => row.length >= 6 && row[0]); // Lọc dòng có dữ liệu
-                    
-                    document.getElementById('rowCount').textContent = uploadedData.length - 1; // Trừ dòng tiêu đề
-                    document.getElementById('progress').style.width = '100%';
-                    
-                    setTimeout(() => {
-                        document.getElementById('progressBar').classList.add('hidden');
-                    }, 1000);
-                    
-                } catch (error) {
-                    alert('Lỗi khi đọc file: ' + error.message);
-                    document.getElementById('fileInfo').classList.add('hidden');
-                    document.getElementById('progressBar').classList.add('hidden');
-                }
-            };
-            
-            reader.onerror = function() {
-                alert('Lỗi khi đọc file');
-                document.getElementById('fileInfo').classList.add('hidden');
-                document.getElementById('progressBar').classList.add('hidden');
-            };
-            
-            reader.readAsArrayBuffer(file);
-        }
-        
-        function processUploadedData() {
-            if (uploadedData.length === 0) {
-                alert('Không có dữ liệu để xử lý');
-                return;
-            }
-            
-            // Xóa khách hàng cũ (giữ lại khách hàng đầu tiên)
-            while (customerCount > 1) {
-                removeCustomer();
-            }
-            
-            let processedCount = 0;
-            
-            // Xử lý từng dòng dữ liệu (bỏ qua dòng tiêu đề)
-            uploadedData.forEach((row, index) => {
-                if (index === 0) return; // Bỏ qua dòng tiêu đề
-                
-                if (row.length >= 7) {
-                    const customerData = {
-                        name: row[0] || '',
-                        year: row[1] || '',
-                        idNumber: row[2] || '',
-                        idDate: row[3] || '',
-                        idPlace: row[4] || '',
-                        address: row[5] || '',
-                        phone: row[6] || ''
-                    };
-                    
-                    addCustomer(customerData);
-                    processedCount++;
-                }
-            });
-            
-            alert(`Đã thêm ${processedCount} khách hàng từ file`);
-            switchTab(1);
-        }
-        
-        // Xử lý dữ liệu dán
-        function processPastedData() {
-            const pasteData = document.getElementById('pasteData').value;
-            const textData = document.getElementById('textData').value;
-            
-            if (!pasteData && !textData) {
-                alert('Vui lòng nhập dữ liệu');
-                return;
-            }
-            
-            const dataToProcess = pasteData || textData;
-            const lines = dataToProcess.split('\n').filter(line => line.trim());
-            
-            if (lines.length === 0) {
-                alert('Không có dữ liệu hợp lệ');
-                return;
-            }
-            
-            // Xóa khách hàng cũ (giữ lại khách hàng đầu tiên)
-            while (customerCount > 1) {
-                removeCustomer();
-            }
-            
-            let processedCount = 0;
-            
-            // Thêm khách hàng mới từ dữ liệu dán
-            lines.forEach((line, index) => {
-                if (!line.trim()) return;
-                
-                // Xác định delimiter (tab hoặc |)
-                const hasTab = line.includes('\t');
-                const hasPipe = line.includes('|');
-                const delimiter = hasTab ? '\t' : (hasPipe ? '|' : null);
-                
-                if (!delimiter) {
-                    console.log('Dòng không có delimiter phù hợp:', line);
-                    return;
-                }
-                
-                const columns = line.split(delimiter).map(col => col.trim());
-                
-                if (columns.length >= 7) {
-                    const customerData = {
-                        name: columns[0] || '',
-                        year: columns[1] || '',
-                        idNumber: columns[2] || '',
-                        idDate: columns[3] || '',
-                        idPlace: columns[4] || '',
-                        address: columns[5] || '',
-                        phone: columns[6] || ''
-                    };
-                    
-                    addCustomer(customerData);
-                    processedCount++;
-                }
-            });
-            
-            alert(`Đã thêm ${processedCount} khách hàng từ dữ liệu`);
-            switchTab(1);
-        }
-        
-        // Tải file mẫu
-        function downloadTemplate() {
-            const templateData = [
-                ['Họ tên', 'Năm sinh', 'CMND/CCCD', 'Ngày cấp', 'Nơi cấp', 'Địa chỉ', 'Số điện thoại'],
-                ['Phan Nhật Linh', '1996', '079096006806', '22/11/2021', 'Cục Cảnh sát về QLHC và TTXH', '158/5A ấp Thới Tây 2, Xã Hóc Môn (Xã Tân Hiệp, Huyện Hóc Môn cũ), Thành phố Hồ Chí Minh', '0901350113'],
-                ['Nguyễn Văn A', '1985', '012345678901', '15/08/2020', 'Công an TP Hà Nội', '123 Đường ABC, Quận 1, TP Hồ Chí Minh', '0912345678']
-            ];
-            
-            const ws = XLSX.utils.aoa_to_sheet(templateData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'KhachHang');
-            XLSX.writeFile(wb, 'Mau_danh_sach_khach_hang.xlsx');
-        }
-        
-        // Tạo đơn
-        function previewDocument() {
-            if (customerCount === 0) {
-                alert('Vui lòng thêm ít nhất một khách hàng');
-                return;
-            }
-            generateDocument(1); // Xem trước khách hàng đầu tiên
-        }
-        
-        function generateDocument(customerIndex = 1) {
-            // Lấy thông tin từ form
-            const courtName = document.getElementById('courtName').value;
-            const currentDate = document.getElementById('currentDate').value;
-            const plaintiffName = document.getElementById('plaintiffName').value;
-            const plaintiffAddress = document.getElementById('plaintiffAddress').value;
-            const plaintiffContact = document.getElementById('plaintiffContact').value;
-            const legalRepresentative = document.getElementById('legalRepresentative').value;
-            const authorizedRepresentative = document.getElementById('authorizedRepresentative').value;
-            const authorizationDoc = document.getElementById('authorizationDoc').value;
-            
-            const defendantName = document.getElementById(`customerName${customerIndex}`).value;
-            const defendantYear = document.getElementById(`customerYear${customerIndex}`).value;
-            const defendantID = document.getElementById(`customerId${customerIndex}`).value;
-            const idIssueDate = document.getElementById(`customerIdDate${customerIndex}`).value;
-            const idIssuePlace = document.getElementById(`customerIdPlace${customerIndex}`).value;
-            const defendantAddress = document.getElementById(`customerAddress${customerIndex}`).value;
-            const defendantPhone = document.getElementById(`customerPhone${customerIndex}`).value;
-            
-            const violationDate = document.getElementById('violationDate').value;
-            const violationDescription = document.getElementById('violationDescription').value;
-            
-            // Tạo nội dung hợp đồng
-            let contractsContent = '';
-            let totalPrincipal = 0;
-            let totalInterest = 0;
-            
-            for (let i = 1; i <= contractCount; i++) {
-                const contractType = document.getElementById(`contract${i}Type`).value;
-                const contractDate = document.getElementById(`contract${i}Date`).value;
-                const contractAmount = document.getElementById(`contract${i}Amount`).value;
-                const contractPurpose = document.getElementById(`contract${i}Purpose`).value;
-                const contractTerm = document.getElementById(`contract${i}Term`).value;
-                const contractInterest = document.getElementById(`contract${i}Interest`).value;
-                const debtDate = document.getElementById(`debtDate${i}`).value;
-                const principal = document.getElementById(`principal${i}`).value;
-                const interest = document.getElementById(`interest${i}`).value;
-                const total = document.getElementById(`total${i}`).value;
-                
-                // Tính tổng nợ
-                const principalValue = parseInt(principal.replace(/\./g, '')) || 0;
-                const interestValue = parseInt(interest.replace(/\./g, '')) || 0;
-                totalPrincipal += principalValue;
-                totalInterest += interestValue;
-                
-                contractsContent += `
-${i}.  <strong>${contractType}</strong> ngày ${contractDate}, cụ thể:<br><br>
+  <button onclick="taoDon()">Tạo đơn Word</button>
 
-- ${contractAmount.includes('Hạn mức') ? 'Hạn mức tín dụng:' : 'Số tiền cho vay:'} ${contractAmount}<br>
-- Mục đích vay: ${contractPurpose}<br>
-${contractTerm ? `- Thời hạn vay: ${contractTerm}<br>` : ''}
-- Lãi suất: ${contractInterest}<br><br>
+  <script>
+    // format số có dấu phẩy
+    function formatMoney(v) {
+      v = (v || '').toString().replace(/[^\d\-]/g, '');
+      if (!v) return '';
+      const n = Number(v);
+      return n.toLocaleString('vi-VN');
+    }
 
-Dư nợ thực tế tạm tính đến ngày ${debtDate} theo hợp đồng cho vay trên là:<br><br>
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
 
-<table class="preview-table">
-    <tr>
-        <td style="width: 30%;">- Nợ gốc:</td>
-        <td style="width: 70%;">${principal}</td>
-    </tr>
-    <tr>
-        <td>- Nợ lãi:</td>
-        <td>${interest}</td>
-    </tr>
-    <tr>
-        <td><strong>Tổng cộng:</strong></td>
-        <td><strong>${total}</strong></td>
-    </tr>
-</table>
-<br>
-`;
-            }
-            
-            // Format số tiền
-            function formatCurrency(amount) {
-                return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đồng';
-            }
-            
-            const grandTotal = totalPrincipal + totalInterest;
-            
-            // Tạo nội dung đơn
-            const documentContent = `
-<div style="text-align: center; font-style: italic; margin-bottom: 30px;">${currentDate}</div>
+    function taoDon() {
+      const tenBiDon   = document.getElementById('tenBiDon').value.trim();
+      if (!tenBiDon) {
+        alert('Bạn phải nhập tên bị đơn.');
+        return;
+      }
 
-<div style="text-align: center; font-weight: bold; font-size: 16px; margin: 20px 0; text-transform: uppercase;">ĐƠN SỬA ĐỔI BỔ SUNG ĐƠN KHỞI KIỆN</div>
+      const namSinh    = document.getElementById('namSinh').value.trim();
+      const soCCCD     = document.getElementById('soCCCD').value.trim();
+      const noiCap     = document.getElementById('noiCap').value.trim();
+      const diaChi     = document.getElementById('diaChi').value.trim();
+      const dienThoai  = document.getElementById('dienThoai').value.trim();
+      const ngayViPham = document.getElementById('ngayViPham').value.trim();
+      const ngayTinhNo = document.getElementById('ngayTinhNo').value.trim();
 
-<div style="text-align: center; font-style: italic; margin-bottom: 30px;">(V/v ông/bà ${defendantName} vi phạm hợp đồng tín dụng)</div>
+      const loaiHD     = document.getElementById('loaiHD').value;
+      const tieuDeHD   = document.getElementById('tieuDeHD').value.trim();
+      const soHD       = document.getElementById('soHD').value.trim();
+      const ngayHD     = document.getElementById('ngayHD').value.trim();
+      const soTienVay  = formatMoney(document.getElementById('soTienVay').value);
+      const mucDichVay = document.getElementById('mucDichVay').value.trim();
+      const thoiHanVay = document.getElementById('thoiHanVay').value.trim();
+      const laiSuatMoTa= document.getElementById('laiSuatMoTa').value.trim();
+      const noGoc      = formatMoney(document.getElementById('noGoc').value);
+      const noLai      = formatMoney(document.getElementById('noLai').value);
+      const tongNo     = (Number(noGoc.replace(/\./g,'')) || 0) + (Number(noLai.replace(/\./g,'')) || 0);
 
-<div style="font-weight: bold; margin-bottom: 20px;">Kính gửi: ${courtName}</div>
+      // Chọn nhãn theo loại HĐ
+      let nhanSoTien = "Số tiền cho vay";
+      let nhanThoiHan = "Thời hạn vay";
+      if (loaiHD === "THE") {
+        nhanSoTien = "Hạn mức tín dụng";
+        nhanThoiHan = "Thời hạn sử dụng thẻ";
+      }
 
-<div style="font-weight: bold; margin: 15px 0;">I. BÊN KHỞI KIỆN: <strong>${plaintiffName}</strong>.</div>
+      const tongNoFmt = tongNo ? tongNo.toLocaleString('vi-VN') : "";
 
-<div style="padding-left: 40px;">
-    - Địa chỉ trụ sở: ${plaintiffAddress}.<br>
-    - Địa chỉ liên lạc: ${plaintiffContact}.<br>
-    - Người đại diện theo pháp luật: <strong>${legalRepresentative}</strong>.<br>
-    - Người đại diện theo ủy quyền: <strong>${authorizedRepresentative}</strong>.<br>
-    <br>
-    <em>(${authorizationDoc}).</em>
-</div>
+      // HTML kiểu Word hiểu được
+      const html =
+        "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Đơn khởi kiện</title></head><body>" +
 
-<br>
+        "<p style='text-align:center; font-weight:bold; font-size:16pt'>ĐƠN KHỞI KIỆN</p>" +
+        "<p style='text-align:center;'>V/v: Tranh chấp hợp đồng tín dụng</p><br/>" +
 
-<div style="font-weight: bold; margin: 15px 0;">II. BÊN BỊ KIỆN: ÔNG/BÀ ${defendantName} SINH NĂM: ${defendantYear}</div>
+        "<p><b>Nguyên đơn:</b> Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank).</p>" +
+        "<p><b>Bị đơn:</b> " + escapeHtml(tenBiDon) + " - Năm sinh: " + escapeHtml(namSinh) + ".</p>" +
+        "<p>CMND/CCCD số " + escapeHtml(soCCCD) + " do " + escapeHtml(noiCap) + " cấp.</p>" +
+        "<p>Địa chỉ: " + escapeHtml(diaChi) + "</p>" +
+        "<p>Số điện thoại: " + escapeHtml(dienThoai) + "</p>" +
+        "<br/>" +
 
-<div style="padding-left: 40px;">
-    - CMND/CCCD số ${defendantID} do ${idIssuePlace} cấp ngày ${idIssueDate}.<br>
-    - Địa chỉ: ${defendantAddress}.<br>
-    - Số điện thoại: ${defendantPhone}
-</div>
+        (ngayViPham ? ("<p>Từ ngày " + escapeHtml(ngayViPham) +
+        " ông/bà " + escapeHtml(tenBiDon) +
+        " đã vi phạm nghĩa vụ thanh toán nợ vay cho VPBank.</p>") : "") +
 
-<br>
+        "<br/><p><b>1. Hợp đồng tín dụng, cụ thể:</b></p>" +
+        "<p>- " + escapeHtml(tieuDeHD) +
+        (soHD ? (" số " + escapeHtml(soHD)) : "") +
+        (ngayHD ? (" ngày " + escapeHtml(ngayHD)) : "") +
+        ".</p>" +
+        "<p>- " + nhanSoTien + ": " + escapeHtml(soTienVay) + " đồng.</p>" +
+        "<p>- Mục đích vay: " + escapeHtml(mucDichVay) + ".</p>" +
+        "<p>- " + nhanThoiHan + ": " + escapeHtml(thoiHanVay) + ".</p>" +
+        (laiSuatMoTa ? ("<p>- Lãi suất cho vay tại thời điểm giải ngân: " +
+        escapeHtml(laiSuatMoTa) + "</p>") : "") +
 
-<div style="font-weight: bold; margin: 15px 0;">III. NỘI DUNG KHỞI KIỆN:</div>
+        (ngayTinhNo ? ("<p>Dư nợ thực tế tạm tính đến ngày " +
+        escapeHtml(ngayTinhNo) + " theo hợp đồng cho vay trên là:</p>") : "<p>Dư nợ thực tế theo hợp đồng cho vay trên là:</p>") +
 
-<div style="padding-left: 40px;">
-    ${plaintiffName.split(' ')[0]} <em>(sau đây gọi tắt là "VPBank")</em> với ông/bà ${defendantName} đã cùng ký kết các Hợp đồng cho vay như sau:<br><br>
-    
-    ${contractsContent}
-    
-    Từ ngày ${violationDate} ông/bà ${defendantName} đã vi phạm nghĩa vụ thanh toán nợ vay cho VPBank.<br><br>
-    
-    ${violationDescription.replace(/\n/g, '<br>')}
-</div>
+        "<p style='margin-left:40px'>- Nợ gốc: " + escapeHtml(noGoc) + " đồng.</p>" +
+        "<p style='margin-left:40px'>- Nợ lãi: " + escapeHtml(noLai) + " đồng.</p>" +
+        "<p style='margin-left:40px'><b>Tổng cộng: " + escapeHtml(tongNoFmt) + " đồng.</b></p>" +
 
-<br>
+        "<br/><p>Những nội dung trên là đúng sự thật, kính đề nghị Quý Tòa xem xét giải quyết./.</p>" +
 
-<div style="font-weight: bold; text-decoration: underline; margin: 20px 0;">[YÊU CẦU CỦA NGƯỜI KHỞI KIỆN]</div>
+        "</body></html>";
 
-<br>
-
-<div style="padding-left: 40px;">
-    Kính đề nghị Quý Tòa thụ lý giải quyết vụ án và xem xét phán quyết:<br><br>
-    
-    1. Buộc ông/bà ${defendantName} phải thanh toán cho VPBank một lần tổng dư nợ tạm tính đến ngày ${document.getElementById('debtDate1').value} là:<br><br>
-    
-    <table class="preview-table">
-        <tr>
-            <td style="width: 30%;">- Nợ gốc:</td>
-            <td style="width: 70%;">${formatCurrency(totalPrincipal)}</td>
-        </tr>
-        <tr>
-            <td>- Nợ lãi:</td>
-            <td>${formatCurrency(totalInterest)}</td>
-        </tr>
-        <tr>
-            <td><strong>Tổng cộng:</strong></td>
-            <td><strong>${formatCurrency(grandTotal)}</strong></td>
-        </tr>
-    </table>
-    <br>
-    
-    2. Yêu cầu Tòa án tuyên trong bản án tiếp tục cho tính lãi theo đúng thỏa thuận trong các Hợp đồng cho đến khi ông/bà ${defendantName} thực tế thanh toán hết nợ cho VPBank.<br><br>
-    
-    3. Ông/bà ${defendantName} phải chịu toàn bộ án phí và các chi phí liên quan (nếu có) do vi phạm nghĩa vụ thanh toán.<br><br>
-    
-    Những nội dung đã trình bày như trên là đúng sự thật, kính trình Quý Tòa thẩm xét./
-</div>
-
-<br><br>
-
-<div class="signature-section">
-    <div><strong>NGƯỜI KHỞI KIỆN</strong></div>
-    <br><br><br>
-    <div><strong>${plaintiffName.split('(')[0].trim()}</strong></div>
-    <br>
-    <div><strong>NGƯỜI ĐẠI DIỆN THEO ỦY QUYỀN</strong></div>
-    <br><br>
-    <div><strong>${authorizedRepresentative.split('-')[0].trim()}</strong></div>
-</div>
-            `;
-            
-            document.getElementById('documentPreview').innerHTML = documentContent;
-        }
-        
-        // Tạo tất cả đơn
-        function generateAllDocuments() {
-            if (customerCount === 0) {
-                alert('Vui lòng thêm ít nhất một khách hàng');
-                return;
-            }
-            
-            alert(`Đã tạo ${customerCount} đơn khởi kiện thành công!`);
-            generateDocument(1); // Hiển thị đơn đầu tiên
-        }
-        
-        // Tải về
-        function downloadAllDocuments() {
-            if (customerCount === 0) {
-                alert('Không có khách hàng nào để tải về');
-                return;
-            }
-            
-            // Tạo từng file đơn
-            for (let i = 1; i <= customerCount; i++) {
-                const customerName = document.getElementById(`customerName${i}`).value;
-                generateDocument(i);
-                
-                // Tạo blob và tải về
-                const content = document.getElementById('documentPreview').innerHTML;
-                const blob = new Blob([`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <style>
-                            body { 
-                                font-family: "Times New Roman", serif; 
-                                line-height: 1.6;
-                                padding: 40px;
-                            }
-                            .preview-table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin: 15px 0;
-                            }
-                            .preview-table td {
-                                border: 1px solid #000;
-                                padding: 8px 12px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        ${content}
-                    </body>
-                    </html>
-                `], { type: 'text/html' });
-                
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Don_khoi_kien_${customerName.replace(/\s+/g, '_')}.doc`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-            
-            alert(`Đã tải về ${customerCount} file đơn khởi kiện`);
-        }
-        
-        function downloadSummary() {
-            let summary = 'BÁO CÁO TỔNG HỢP ĐƠN KHỞI KIỆN\n\n';
-            summary += `Ngày tạo: ${new Date().toLocaleDateString('vi-VN')}\n`;
-            summary += `Tổng số khách hàng: ${customerCount}\n\n`;
-            
-            for (let i = 1; i <= customerCount; i++) {
-                summary += `--- KHÁCH HÀNG ${i} ---\n`;
-                summary += `Họ tên: ${document.getElementById(`customerName${i}`).value}\n`;
-                summary += `Năm sinh: ${document.getElementById(`customerYear${i}`).value}\n`;
-                summary += `CMND/CCCD: ${document.getElementById(`customerId${i}`).value}\n`;
-                summary += `Ngày cấp: ${document.getElementById(`customerIdDate${i}`).value}\n`;
-                summary += `Nơi cấp: ${document.getElementById(`customerIdPlace${i}`).value}\n`;
-                summary += `Địa chỉ: ${document.getElementById(`customerAddress${i}`).value}\n`;
-                summary += `Số điện thoại: ${document.getElementById(`customerPhone${i}`).value}\n\n`;
-            }
-            
-            const blob = new Blob([summary], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Bao_cao_tong_hop.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-        
-        function printDocument() {
-            const previewContent = document.getElementById('documentPreview').innerHTML;
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>In Đơn Khởi Kiện</title>
-                    <style>
-                        body { 
-                            font-family: "Times New Roman", serif; 
-                            line-height: 1.6;
-                            padding: 40px;
-                        }
-                        .preview-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin: 15px 0;
-                        }
-                        .preview-table td {
-                            border: 1px solid #000;
-                            padding: 8px 12px;
-                        }
-                        @media print {
-                            body { padding: 20px; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${previewContent}
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
-        }
-        
-        function resetForm() {
-            if (confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) {
-                location.reload();
-            }
-        }
-        
-        function setupEventListeners() {
-            // Kéo thả file
-            const uploadArea = document.getElementById('uploadArea');
-            
-            uploadArea.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                uploadArea.style.background = '#e8f4fc';
-                uploadArea.style.borderColor = '#2980b9';
-            });
-            
-            uploadArea.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                uploadArea.style.background = '#f8f9fa';
-                uploadArea.style.borderColor = '#3498db';
-            });
-            
-            uploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                uploadArea.style.background = '#f8f9fa';
-                uploadArea.style.borderColor = '#3498db';
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFileUpload(files[0]);
-                }
-            });
-        }
-    </script>
+      const blob = new Blob([html], { type: "application/msword" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ĐKK_" + tenBiDon.replace(/\s+/g, "_") + ".doc";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </body>
 </html>
