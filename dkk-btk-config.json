@@ -6,24 +6,24 @@
       "name": "Tool Đơn Khởi Kiện (ĐKK)",
       "status": "LIVE",
       "icon": "fa-gavel",
-      "desc": "Tạo đơn khởi kiện theo mẫu chuẩn (hỗ trợ nhiều hợp đồng/khách hàng).",
+      "desc": "Tải tool ĐKK dạng .zip",
       "version": "1.0.0",
-      "latestUrl": "https://YOUR_LINK_DOWNLOAD_DKK",
+      "latestUrl": "https://giabao1881.github.io/TOOLS/assets/TOOL_DON_KHOI_KIEN.zip",
       "guideUrl": "",
-      "tags": ["legal", "vpbank", "doc"],
-      "note": "Bản mới nhất đã sẵn sàng tải."
+      "tags": ["legal", "vpbank", "zip"],
+      "note": "File .zip - tải về và giải nén để dùng."
     },
     {
       "id": "btk",
       "name": "Tool Bảng Tự Khai (BTK)",
       "status": "LIVE",
       "icon": "fa-file-contract",
-      "desc": "Tạo bảng tự khai thông tin tín chấp theo chuẩn nội bộ.",
+      "desc": "Tải tool BTK dạng .zip",
       "version": "1.0.0",
-      "latestUrl": "https://YOUR_LINK_DOWNLOAD_BTK",
+      "latestUrl": "https://giabao1881.github.io/TOOLS/assets/TOOL_BTK_TINCHAP.zip",
       "guideUrl": "",
-      "tags": ["bank", "vpbank", "form"],
-      "note": "Bản mới nhất đã sẵn sàng tải."
+      "tags": ["bank", "vpbank", "zip"],
+      "note": "File .zip - tải về và giải nén để dùng."
     }
   ]
 }
