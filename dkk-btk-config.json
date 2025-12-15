@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2025-12-16",
+  "tools": [
+    {
+      "id": "dkk",
+      "name": "Tool Đơn Khởi Kiện (ĐKK)",
+      "status": "LIVE",
+      "icon": "fa-gavel",
+      "desc": "Tạo đơn khởi kiện theo mẫu chuẩn (hỗ trợ nhiều hợp đồng/khách hàng).",
+      "version": "1.0.0",
+      "latestUrl": "https://YOUR_LINK_DOWNLOAD_DKK",
+      "guideUrl": "",
+      "tags": ["legal", "vpbank", "doc"],
+      "note": "Bản mới nhất đã sẵn sàng tải."
+    },
+    {
+      "id": "btk",
+      "name": "Tool Bảng Tự Khai (BTK)",
+      "status": "LIVE",
+      "icon": "fa-file-contract",
+      "desc": "Tạo bảng tự khai thông tin tín chấp theo chuẩn nội bộ.",
+      "version": "1.0.0",
+      "latestUrl": "https://YOUR_LINK_DOWNLOAD_BTK",
+      "guideUrl": "",
+      "tags": ["bank", "vpbank", "form"],
+      "note": "Bản mới nhất đã sẵn sàng tải."
+    }
+  ]
+}
