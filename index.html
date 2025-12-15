@@ -1,199 +1,470 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <title>Tool tạo đơn khởi kiện (GitHub Pages)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>baotg10 | Tải Tool ĐKK & BTK</title>
+  <meta name="description" content="Trang tải tool Đơn Khởi Kiện (ĐKK) và Bảng Tự Khai (BTK) - baotg10" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      max-width: 900px; 
-      margin: 20px auto; 
-      line-height: 1.4;
+    :root{
+      --bg0:#0b1220; --bg1:#0f172a;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --text:#e5e7eb; --muted:#94a3b8; --muted2:#64748b;
+      --p1:#3b82f6; --p2:#8b5cf6; --p3:#ec4899;
+      --shadow: 0 18px 44px rgba(0,0,0,.35);
+      --ring: 0 0 0 4px rgba(59,130,246,.18);
+      --radius: 18px; --radius2: 14px;
+      --container: 980px;
     }
-    h1 { text-align: center; }
-    fieldset { margin-bottom: 16px; }
-    label { display: block; margin-top: 6px; }
-    input, select, textarea { width: 100%; padding: 4px; box-sizing: border-box; }
-    button { margin-top: 12px; padding: 8px 16px; }
+    *{margin:0;padding:0;box-sizing:border-box;font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 12% 10%, rgba(59,130,246,.22), transparent 55%),
+        radial-gradient(900px 520px at 88% 22%, rgba(236,72,153,.18), transparent 55%),
+        radial-gradient(900px 520px at 55% 105%, rgba(139,92,246,.20), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      padding: 18px;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--container);margin:0 auto}
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Top */
+    .top{
+      position: sticky; top: 14px; z-index: 10;
+      padding: 12px 14px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:40px;height:40px;border-radius:12px;
+      display:grid;place-items:center;font-weight:950;color:white;
+      background: linear-gradient(135deg,var(--p1),var(--p2));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 12px 25px rgba(59,130,246,.22);
+    }
+    .b1{font-weight:950}
+    .b2{color:var(--muted);font-size:.86rem;margin-top:2px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:999px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-size:.9rem;font-weight:900;
+    }
+    .pill strong{color:var(--text)}
+    .btn{
+      border:none;border-radius:12px;padding:11px 14px;
+      cursor:pointer;font-weight:950;font-size:.92rem;
+      display:inline-flex;align-items:center;gap:8px;
+      color:white;transition:.2s ease;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn:hover{transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,0,0,.25)}
+    .btn-primary{background: linear-gradient(90deg,var(--p1),var(--p2))}
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero{margin-top:14px;padding:18px}
+    .title{
+      font-size: clamp(1.8rem, 4.6vw, 2.6rem);
+      font-weight: 950; letter-spacing:-.8px; line-height:1.08;
+      background: linear-gradient(90deg,var(--p1),var(--p2),var(--p3));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      margin-bottom: 8px;
+    }
+    .sub{color:var(--muted);line-height:1.65;font-size:1.02rem}
+    .note{
+      margin-top:12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15,23,42,.35);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      line-height:1.6;
+      font-size:.92rem;
+    }
+    .note b{color:var(--text)}
+
+    /* Tools */
+    .grid{margin-top:14px;display:grid;grid-template-columns:1fr;gap:12px}
+    .tool{
+      padding:16px;border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,23,42,.35);
+      position:relative; overflow:hidden;
+    }
+    .tool::before{
+      content:""; position:absolute; left:0; top:0; right:0; height:3px;
+      background: linear-gradient(90deg,var(--p1),var(--p2),var(--p3)); opacity:.9;
+    }
+    .toolTop{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+    .leftInfo{display:flex;gap:12px;align-items:flex-start}
+    .ico{
+      width:44px;height:44px;border-radius:14px;
+      display:grid;place-items:center;
+      background: rgba(59,130,246,.12);
+      border:1px solid rgba(59,130,246,.25);
+      color: rgba(147,197,253,.95);
+      flex:0 0 auto;
+      margin-top:2px;
+    }
+    .h{font-size:1.12rem;font-weight:950;line-height:1.25}
+    .p{margin-top:8px;color:var(--muted);line-height:1.6;font-size:.95rem;max-width: 720px}
+    .meta{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      padding:6px 10px;border-radius:999px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color: rgba(203,213,225,.9);
+      font-size:.82rem;font-weight:900;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:999px;
+      font-size:.82rem;font-weight:950;
+      border:1px solid;
+    }
+    .live{background: rgba(34,197,94,.12); color:#22c55e; border-color: rgba(34,197,94,.25)}
+    .soon{background: rgba(245,158,11,.12); color:#f59e0b; border-color: rgba(245,158,11,.25)}
+
+    .toolActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .dl{
+      width: 100%;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding: 12px 14px;border-radius: 14px;
+      font-weight: 950; transition:.2s ease;
+    }
+    .dl.primary{
+      background: linear-gradient(90deg, rgba(59,130,246,.95), rgba(139,92,246,.95));
+      color:white;border:none;
+    }
+    .dl.primary:hover{transform: translateY(-2px); box-shadow: 0 16px 28px rgba(59,130,246,.22)}
+    .dl.secondary{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+    }
+    .dl.secondary:hover{transform: translateY(-2px); background: rgba(59,130,246,.10)}
+    .dl.disabled{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(203,213,225,.8);
+      cursor:not-allowed;
+      opacity:.7;
+    }
+
+    /* FAQ */
+    .section{margin-top:14px;padding:16px}
+    .secTitle{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:950;margin-bottom:10px}
+    .dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(90deg,var(--p1),var(--p2));box-shadow:0 0 0 4px rgba(59,130,246,.14)}
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,23,42,.35);
+      border-radius: 14px;
+      padding: 12px 12px;
+      margin-top:10px;
+    }
+    summary{cursor:pointer;font-weight:950}
+    details p{margin-top:8px;color:var(--muted);line-height:1.6}
+    code{background: rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);padding:2px 6px;border-radius:8px}
+
+    /* Footer */
+    .footer{
+      margin-top: 14px;
+      text-align:center;
+      color: var(--muted2);
+      font-size: .9rem;
+      padding: 16px 6px 22px;
+    }
+    .hl{
+      font-weight: 950;
+      background: linear-gradient(90deg,var(--p1),var(--p2),var(--p3));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 18px;
+      background: rgba(2,6,23,.70);
+      backdrop-filter: blur(10px);
+      z-index: 50;
+    }
+    .modal.active{display:flex}
+    .modalCard{
+      width: min(520px, 100%);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      box-shadow: 0 30px 70px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalHead{
+      display:flex;align-items:center;justify-content:space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .xbtn{
+      width:38px;height:38px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .modalBody{padding: 16px;color:var(--muted);line-height:1.65}
+    .modalBody b{color:var(--text)}
+    .modalFoot{padding: 14px 16px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.12);justify-content:flex-end}
   </style>
 </head>
+
 <body>
-  <h1>TOOL TẠO ĐƠN KHỞI KIỆN (WEB)</h1>
+  <div class="container">
+    <!-- TOP -->
+    <div class="top card">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div class="b1">baotg10</div>
+          <div class="b2">Trang tải Tool ĐKK & BTK</div>
+        </div>
+      </div>
 
-  <fieldset>
-    <legend><strong>Thông tin bị đơn</strong></legend>
-    <label>Họ tên bị đơn:
-      <input id="tenBiDon" />
-    </label>
-    <label>Năm sinh:
-      <input id="namSinh" />
-    </label>
-    <label>Số CMND/CCCD:
-      <input id="soCCCD" />
-    </label>
-    <label>Nơi cấp:
-      <input id="noiCap" />
-    </label>
-    <label>Địa chỉ:
-      <textarea id="diaChi" rows="2"></textarea>
-    </label>
-    <label>Số điện thoại:
-      <input id="dienThoai" />
-    </label>
-    <label>Ngày vi phạm nghĩa vụ thanh toán:
-      <input id="ngayViPham" placeholder="ví dụ: 10/05/2023" />
-    </label>
-    <label>Ngày tính nợ:
-      <input id="ngayTinhNo" placeholder="ví dụ: 20/11/2025" />
-    </label>
-  </fieldset>
+      <div class="actions">
+        <div class="pill"><i class="fa-solid fa-shield-halved"></i> <strong>An toàn</strong> <span style="opacity:.85">Link chính chủ</span></div>
+        <button class="btn btn-ghost" id="openHelp"><i class="fa-solid fa-circle-question"></i> Hướng dẫn</button>
+        <a class="btn btn-primary" href="mailto:baotg10@vpbank.com.vn"><i class="fa-solid fa-envelope"></i> Liên hệ</a>
+      </div>
+    </div>
 
-  <fieldset>
-    <legend><strong>Thông tin HỢP ĐỒNG (1 hợp đồng)</strong></legend>
-    <label>Loại hợp đồng:
-      <select id="loaiHD">
-        <option value="LD">LD (vay tiền mặt)</option>
-        <option value="THE">Thẻ tín dụng</option>
-        <option value="PDPD">PDPD</option>
-      </select>
-    </label>
-    <label>Tiêu đề hợp đồng (ví dụ: Giấy đăng ký kiêm hợp đồng cho vay không TSBD, mở &amp; sử dụng...):
-      <textarea id="tieuDeHD" rows="2"></textarea>
-    </label>
-    <label>Số hợp đồng (nếu có):
-      <input id="soHD" />
-    </label>
-    <label>Ngày ký (nếu cần):
-      <input id="ngayHD" placeholder="08/12/2023" />
-    </label>
-    <label>Số tiền cho vay / hạn mức:
-      <input id="soTienVay" placeholder="30000000" />
-    </label>
-    <label>Mục đích vay:
-      <textarea id="mucDichVay" rows="2"></textarea>
-    </label>
-    <label>Thời hạn vay:
-      <input id="thoiHanVay" placeholder="48 tháng" />
-    </label>
-    <label>Mô tả lãi suất (ghi đúng câu tiếng Việt bạn muốn):
-      <textarea id="laiSuatMoTa" rows="2" placeholder="Ví dụ: 23%/năm được cố định đến kỳ điều chỉnh lãi suất gần nhất, sau đó định kỳ điều chỉnh 03 tháng/01 lần (+) biên độ 18%/năm."></textarea>
-    </label>
-    <label>Dư nợ gốc (tới ngày tính nợ):
-      <input id="noGoc" placeholder="27042271" />
-    </label>
-    <label>Dư nợ lãi (tới ngày tính nợ):
-      <input id="noLai" placeholder="32070580" />
-    </label>
-  </fieldset>
+    <!-- HERO -->
+    <div class="hero card">
+      <div class="title">Tải Tool ĐKK & BTK</div>
+      <div class="sub">
+        Chọn đúng tool bạn cần và bấm <b>Tải bản mới nhất</b>.
+        Nếu bạn dùng Excel có macro, nhớ <b>Enable Content</b> sau khi mở file.
+      </div>
 
-  <button onclick="taoDon()">Tạo đơn Word</button>
+      <div class="note">
+        <b>Tip:</b> Bạn chỉ cần sửa 1 file <b>JSON</b> (phiên bản, link tải, ghi chú) là trang này tự cập nhật.
+        <br/>
+        Config đang dùng: <code id="cfgUrlText">...</code>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="grid" id="toolList"></div>
+
+    <!-- FAQ -->
+    <div class="section card" id="faq">
+      <div class="secTitle"><span class="dot"></span> FAQ nhanh</div>
+
+      <details>
+        <summary>1) Tải về nhưng bị chặn / không tải được?</summary>
+        <p>
+          Nếu file đặt trên GitHub, bạn nên dùng link <b>Release</b> hoặc link trực tiếp (không phải trang xem file).
+          Nếu bạn muốn, mình có thể chỉnh giúp bạn theo chuẩn “Download latest”.
+        </p>
+      </details>
+
+      <details>
+        <summary>2) Mở file Excel bị cảnh báo Macro?</summary>
+        <p>
+          Đây là cơ chế bảo mật của Excel. Bạn cần bấm <b>Enable Content</b>.
+          Nếu vẫn bị chặn: vào Excel &gt; Options &gt; Trust Center &gt; Trust Center Settings &gt; Macro Settings (tùy chính sách máy).
+        </p>
+      </details>
+
+      <details>
+        <summary>3) Tôi muốn trang tự cập nhật version/ghi chú?</summary>
+        <p>
+          Bạn chỉ cần chỉnh file <code>dkk-btk-config.json</code> (mục version / changelog / links) rồi push lên GitHub Pages là xong.
+        </p>
+      </details>
+    </div>
+
+    <div class="footer">
+      © 2024 <span class="hl">baotg10</span>. Tất cả các quyền được bảo lưu.
+    </div>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div class="modal" id="helpModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div style="font-weight:950"><i class="fa-solid fa-circle-question"></i> Hướng dẫn nhanh</div>
+        <button class="xbtn" id="closeHelp" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modalBody">
+        <b>Bước 1:</b> Bấm “Tải bản mới nhất” ở tool bạn cần.<br/>
+        <b>Bước 2:</b> Mở file & bật macro (Enable Content).<br/>
+        <b>Bước 3:</b> Nếu cần cấp quyền/phiên bản nội bộ, liên hệ email.
+        <div style="margin-top:10px">
+          Email: <b>baotg10@vpbank.com.vn</b><br/>
+          Phone: <b>0336 620 689</b>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <button class="btn btn-ghost" id="copyMail"><i class="fa-regular fa-copy"></i> Copy Email</button>
+        <button class="btn btn-primary" id="copyPhone"><i class="fa-regular fa-copy"></i> Copy SĐT</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // format số có dấu phẩy
-    function formatMoney(v) {
-      v = (v || '').toString().replace(/[^\d\-]/g, '');
-      if (!v) return '';
-      const n = Number(v);
-      return n.toLocaleString('vi-VN');
+    // ====== CONFIG URL (SỬA Ở ĐÂY) ======
+    // Bạn tạo file JSON ở cùng thư mục: ./dkk-btk-config.json
+    // hoặc để ở link khác: https://giabao1881.github.io/TOOLS/dkk-btk-config.json
+    const CONFIG_URL = "./dkk-btk-config.json";
+
+    document.getElementById("cfgUrlText").textContent = CONFIG_URL;
+
+    const defaultConfig = {
+      updatedAt: "2024-12-16",
+      tools: [
+        {
+          id: "dkk",
+          name: "Tool Đơn Khởi Kiện (ĐKK)",
+          status: "SOON",
+          icon: "fa-gavel",
+          desc: "Tạo đơn khởi kiện theo mẫu chuẩn (hỗ trợ nhiều hợp đồng/khách hàng).",
+          version: "0.0.0",
+          latestUrl: "",
+          guideUrl: "",
+          tags: ["legal", "vpbank", "doc"],
+          note: "Đang phát triển / sẽ mở tải khi hoàn thiện."
+        },
+        {
+          id: "btk",
+          name: "Tool Bảng Tự Khai (BTK)",
+          status: "SOON",
+          icon: "fa-file-contract",
+          desc: "Tạo bảng tự khai thông tin tín chấp theo chuẩn nội bộ.",
+          version: "0.0.0",
+          latestUrl: "",
+          guideUrl: "",
+          tags: ["bank", "vpbank", "form"],
+          note: "Đang phát triển / sẽ mở tải khi hoàn thiện."
+        }
+      ]
+    };
+
+    const toolList = document.getElementById("toolList");
+
+    function esc(s){ return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function renderTool(t){
+      const isLive = (t.status || "").toUpperCase() === "LIVE";
+      const badgeClass = isLive ? "badge live" : "badge soon";
+      const badgeText = isLive ? "LIVE" : (t.status || "SOON");
+
+      const tagsHtml = (t.tags || []).map(x => `<span class="tag">#${esc(x)}</span>`).join("");
+
+      const canDownload = !!t.latestUrl;
+
+      const dlBtn = canDownload
+        ? `<a class="dl primary" href="${esc(t.latestUrl)}" target="_blank" rel="noopener">
+             <i class="fa-solid fa-download"></i> Tải bản mới nhất
+           </a>`
+        : `<div class="dl disabled">
+             <i class="fa-solid fa-lock"></i> Chưa mở tải
+           </div>`;
+
+      const guideBtn = t.guideUrl
+        ? `<a class="dl secondary" href="${esc(t.guideUrl)}" target="_blank" rel="noopener">
+             <i class="fa-solid fa-book"></i> Hướng dẫn sử dụng
+           </a>`
+        : `<a class="dl secondary" href="#faq">
+             <i class="fa-solid fa-circle-info"></i> Xem FAQ
+           </a>`;
+
+      return `
+        <div class="tool">
+          <div class="toolTop">
+            <div class="leftInfo">
+              <div class="ico"><i class="fa-solid ${esc(t.icon || "fa-screwdriver-wrench")}"></i></div>
+              <div>
+                <div class="h">
+                  ${esc(t.name || "")}
+                  <span class="${badgeClass}">${esc(badgeText)}</span>
+                </div>
+                <div class="p">${esc(t.desc || "")}</div>
+                <div class="meta">
+                  <span class="tag">v${esc(t.version || "0.0.0")}</span>
+                  ${tagsHtml}
+                </div>
+                ${t.note ? `<div class="p" style="margin-top:8px;color:var(--muted2)"><i class="fa-solid fa-note-sticky"></i> ${esc(t.note)}</div>` : ``}
+              </div>
+            </div>
+          </div>
+
+          <div class="toolActions">
+            ${dlBtn}
+            ${guideBtn}
+          </div>
+        </div>
+      `;
     }
 
-    function escapeHtml(text) {
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    function render(config){
+      toolList.innerHTML = "";
+      (config.tools || []).forEach(t => toolList.innerHTML += renderTool(t));
     }
 
-    function taoDon() {
-      const tenBiDon   = document.getElementById('tenBiDon').value.trim();
-      if (!tenBiDon) {
-        alert('Bạn phải nhập tên bị đơn.');
-        return;
+    async function loadConfig(){
+      try{
+        const res = await fetch(CONFIG_URL, { cache: "no-store" });
+        if(!res.ok) throw new Error("HTTP " + res.status);
+        const cfg = await res.json();
+        render(cfg);
+      }catch(e){
+        render(defaultConfig);
       }
-
-      const namSinh    = document.getElementById('namSinh').value.trim();
-      const soCCCD     = document.getElementById('soCCCD').value.trim();
-      const noiCap     = document.getElementById('noiCap').value.trim();
-      const diaChi     = document.getElementById('diaChi').value.trim();
-      const dienThoai  = document.getElementById('dienThoai').value.trim();
-      const ngayViPham = document.getElementById('ngayViPham').value.trim();
-      const ngayTinhNo = document.getElementById('ngayTinhNo').value.trim();
-
-      const loaiHD     = document.getElementById('loaiHD').value;
-      const tieuDeHD   = document.getElementById('tieuDeHD').value.trim();
-      const soHD       = document.getElementById('soHD').value.trim();
-      const ngayHD     = document.getElementById('ngayHD').value.trim();
-      const soTienVay  = formatMoney(document.getElementById('soTienVay').value);
-      const mucDichVay = document.getElementById('mucDichVay').value.trim();
-      const thoiHanVay = document.getElementById('thoiHanVay').value.trim();
-      const laiSuatMoTa= document.getElementById('laiSuatMoTa').value.trim();
-      const noGoc      = formatMoney(document.getElementById('noGoc').value);
-      const noLai      = formatMoney(document.getElementById('noLai').value);
-      const tongNo     = (Number(noGoc.replace(/\./g,'')) || 0) + (Number(noLai.replace(/\./g,'')) || 0);
-
-      // Chọn nhãn theo loại HĐ
-      let nhanSoTien = "Số tiền cho vay";
-      let nhanThoiHan = "Thời hạn vay";
-      if (loaiHD === "THE") {
-        nhanSoTien = "Hạn mức tín dụng";
-        nhanThoiHan = "Thời hạn sử dụng thẻ";
-      }
-
-      const tongNoFmt = tongNo ? tongNo.toLocaleString('vi-VN') : "";
-
-      // HTML kiểu Word hiểu được
-      const html =
-        "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
-        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
-        "xmlns='http://www.w3.org/TR/REC-html40'>" +
-        "<head><meta charset='utf-8'><title>Đơn khởi kiện</title></head><body>" +
-
-        "<p style='text-align:center; font-weight:bold; font-size:16pt'>ĐƠN KHỞI KIỆN</p>" +
-        "<p style='text-align:center;'>V/v: Tranh chấp hợp đồng tín dụng</p><br/>" +
-
-        "<p><b>Nguyên đơn:</b> Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank).</p>" +
-        "<p><b>Bị đơn:</b> " + escapeHtml(tenBiDon) + " - Năm sinh: " + escapeHtml(namSinh) + ".</p>" +
-        "<p>CMND/CCCD số " + escapeHtml(soCCCD) + " do " + escapeHtml(noiCap) + " cấp.</p>" +
-        "<p>Địa chỉ: " + escapeHtml(diaChi) + "</p>" +
-        "<p>Số điện thoại: " + escapeHtml(dienThoai) + "</p>" +
-        "<br/>" +
-
-        (ngayViPham ? ("<p>Từ ngày " + escapeHtml(ngayViPham) +
-        " ông/bà " + escapeHtml(tenBiDon) +
-        " đã vi phạm nghĩa vụ thanh toán nợ vay cho VPBank.</p>") : "") +
-
-        "<br/><p><b>1. Hợp đồng tín dụng, cụ thể:</b></p>" +
-        "<p>- " + escapeHtml(tieuDeHD) +
-        (soHD ? (" số " + escapeHtml(soHD)) : "") +
-        (ngayHD ? (" ngày " + escapeHtml(ngayHD)) : "") +
-        ".</p>" +
-        "<p>- " + nhanSoTien + ": " + escapeHtml(soTienVay) + " đồng.</p>" +
-        "<p>- Mục đích vay: " + escapeHtml(mucDichVay) + ".</p>" +
-        "<p>- " + nhanThoiHan + ": " + escapeHtml(thoiHanVay) + ".</p>" +
-        (laiSuatMoTa ? ("<p>- Lãi suất cho vay tại thời điểm giải ngân: " +
-        escapeHtml(laiSuatMoTa) + "</p>") : "") +
-
-        (ngayTinhNo ? ("<p>Dư nợ thực tế tạm tính đến ngày " +
-        escapeHtml(ngayTinhNo) + " theo hợp đồng cho vay trên là:</p>") : "<p>Dư nợ thực tế theo hợp đồng cho vay trên là:</p>") +
-
-        "<p style='margin-left:40px'>- Nợ gốc: " + escapeHtml(noGoc) + " đồng.</p>" +
-        "<p style='margin-left:40px'>- Nợ lãi: " + escapeHtml(noLai) + " đồng.</p>" +
-        "<p style='margin-left:40px'><b>Tổng cộng: " + escapeHtml(tongNoFmt) + " đồng.</b></p>" +
-
-        "<br/><p>Những nội dung trên là đúng sự thật, kính đề nghị Quý Tòa xem xét giải quyết./.</p>" +
-
-        "</body></html>";
-
-      const blob = new Blob([html], { type: "application/msword" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ĐKK_" + tenBiDon.replace(/\s+/g, "_") + ".doc";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
     }
+
+    loadConfig();
+
+    // Help modal
+    const helpModal = document.getElementById("helpModal");
+    const openHelp = document.getElementById("openHelp");
+    const closeHelp = document.getElementById("closeHelp");
+
+    function openM(){ helpModal.classList.add("active"); helpModal.setAttribute("aria-hidden","false"); }
+    function closeM(){ helpModal.classList.remove("active"); helpModal.setAttribute("aria-hidden","true"); }
+
+    openHelp.addEventListener("click", openM);
+    closeHelp.addEventListener("click", closeM);
+    helpModal.addEventListener("click", (e)=>{ if(e.target === helpModal) closeM(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeM(); });
+
+    async function copyText(t){
+      try{ await navigator.clipboard.writeText(t); alert("Đã sao chép!"); }
+      catch(e){
+        const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove(); alert("Đã sao chép!");
+      }
+    }
+    document.getElementById("copyMail").addEventListener("click", ()=>copyText("baotg10@vpbank.com.vn"));
+    document.getElementById("copyPhone").addEventListener("click", ()=>copyText("0336620689"));
   </script>
 </body>
 </html>
