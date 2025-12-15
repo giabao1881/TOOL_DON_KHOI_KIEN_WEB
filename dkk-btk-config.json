@@ -3,7 +3,7 @@
   "tools": [
     {
       "id": "dkk",
-      "name": "Tool Đơn Khởi Kiện Tín Chấp (ĐKK)",
+      "name": "Tool Đơn Khởi Kiện Tín Chấp",
       "status": "LIVE",
       "icon": "fa-gavel",
       "desc": "Tải tool ĐKK dạng .zip",
@@ -16,7 +16,7 @@
     },
     {
       "id": "btk",
-      "name": "Tool Bảng Tự Khai Tín Chấp (BTK)",
+      "name": "Tool Bảng Tự Khai Tín Chấp",
       "status": "LIVE",
       "icon": "fa-file-contract",
       "desc": "Tải tool BTK dạng .zip",
